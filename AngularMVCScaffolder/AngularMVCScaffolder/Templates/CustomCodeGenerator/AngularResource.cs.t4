@@ -1,0 +1,26 @@
+﻿<#@ template language="C#" #>
+﻿<#@ ScaffoldingAssembly Processor="ScaffoldingAssemblyLoader" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Reflection" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Reflection" #>
+<#@ output extension=".js" #>
+
+<#@ parameter name="Methods" type="System.String[]" #>
+<#@ parameter name="ServiceName" type="System.String" #>
+
+var appServices = angular.module('appServices', ['ngResource']);
+	
+<#
+WriteLine(String.Format(@"appServices.factory('{0}', ['$resource','configs', 
+function ($resource, configs) {{", ServiceName));
+WriteLine("return $resource(configs.baseWebApiUrl+'api/persons/:id', null, {");
+foreach(var method in Methods) 
+{
+	WriteLine(method);
+}
+WriteLine("})}]);");	
+#>
