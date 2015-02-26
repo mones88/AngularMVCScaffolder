@@ -59,7 +59,7 @@ namespace AngularMVCScaffolder
 
                 // Add the custom scaffolding item from T4 template.
                 this.AddFileFromTemplate(
-                    project: Context.ActiveProject,
+                    project: GetWebSiteProject(),
                     outputPath: "Scripts\\app\\services\\" + angularResourceViewModel.GeneratedFileName,
                     templateName: "AngularResource",
                     templateParameters: parameters,
@@ -74,12 +74,19 @@ namespace AngularMVCScaffolder
                     {"SupportedHttpVerbs", angularControllerViewModel.SupportedHttpVerbs}
                 };
                 this.AddFileFromTemplate(
-                    project: Context.ActiveProject,
+                    project: GetWebSiteProject(),
                     outputPath: "Scripts\\app\\controllers\\" + angularControllerViewModel.GeneratedFileName,
                     templateName: "AngularController",
                     templateParameters: parameters,
                     skipIfExists: false);
             }
+        }
+
+        private EnvDTE.Project GetWebSiteProject() 
+        {
+            var solution = this.Context.ActiveProject.DTE.Solution;
+            var webApiProject = solution.Projects.Cast<EnvDTE.Project>().First(p => p.Name.EndsWith(".WebSite"));
+            return webApiProject;
         }
 
         private const string KIND_FOLDER = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
